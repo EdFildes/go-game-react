@@ -1,0 +1,6 @@
+Go game react
+
+- decideded to go with typescript because of the object oriented nature of board games
+- decided on styled components because I felt there would be a small number of components of which there were unlikely to be multiple variations. So styled components seemed like a tidier approach
+
+- the code for the  looked far worse than I remembered and a lot of it didn't work so great so I started writing some tests

@@ -1,12 +1,21 @@
-import { useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import {TileContainer, TileQuadrants, Stone} from "./components"
+import { GameContext } from "../../App";
 
-const Tile: React.FC<{position: string}> = ({position}) => {
-  const [isStone, setIsStone] = useState(false)
+const Tile: React.FC<{position: string}> = ({position, coords}) => {
+  const game = useContext(GameContext); 
+  const [stoneColor, setStoneColor] = useState()
+
+  const makeMove = () => {
+    game.simulateClick(coords)
+    const stone = game.stoneHandler.getStone(coords)
+    setStoneColor(stone.color)
+  }
+
   return (
-    <TileContainer onClick={() => setIsStone(prevState => !prevState)}>
+    <TileContainer onClick={makeMove}>
       <TileQuadrants position={position}/>
-      {isStone && <Stone />}
+      {stoneColor && <Stone stoneColor={stoneColor} />}
     </TileContainer>
   )
 }

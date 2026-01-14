@@ -1,7 +1,14 @@
+
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ]
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",              // keep ESM in source
+    "jsx": "react-jsx",
+    "moduleResolution": "Bundler",   // or "NodeNext" if you know what you're doing
+    "baseUrl": ".",
+    "paths": { "@/*": ["src/*"] },
+    "types": ["jest", "node"]
+  },
+  "include": ["src", "test"]
 }
+
