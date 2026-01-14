@@ -10,12 +10,13 @@ const Tile: React.FC<{position: string}> = ({position, coords}) => {
     game.simulateClick(coords)
     const stone = game.stoneHandler.getStone(coords)
     setStoneColor(stone.color)
+    console.log(stone.color)
   }
 
   return (
     <TileContainer onClick={makeMove}>
       <TileQuadrants position={position}/>
-      {stoneColor && <Stone stoneColor={stoneColor} />}
+      {stoneColor && <Stone stoneColor={stoneColor === "X" ? "black" : "white"} />}
     </TileContainer>
   )
 }

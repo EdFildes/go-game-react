@@ -29,7 +29,7 @@ export class Game {
 
   constructor(size: number) {
     this.size = size;
-    this.stoneHandler = new StoneHandler(this);
+    this.stoneHandler = new StoneHandler(size);
   }
 
   makeMove(position: Position, neighbours: NeighbourProps[]){
@@ -48,13 +48,15 @@ export class Game {
         }
       }
     }
+    const newColor = colors[colors.indexOf(this.currentColor) ^ 1];
+    this.currentColor = newColor
   }
 
   simulateClick(position: Position) {
 
     const stone = this.stoneHandler.getStone(position)
 
-    if (!stone.exists) {
+    if (!stone.color) {
       
       console.log("\n ** new turn...\n", "Current color ", this.currentColor)
 
@@ -62,21 +64,15 @@ export class Game {
 
       const canMove = neighbours.some(neighbour => 
         neighbour.type === "EMPTY" || 
-        (neighbour.type === "FRIENDLY" && neighbour.groupInstance.liberties.length > 1) || 
-        (neighbour.type === "UNFRIENDLY" && neighbour.groupInstance.liberties.length === 1)
+        (neighbour.type === "FRIENDLY" && neighbour.groupInstance?.liberties?.length > 1) || 
+        (neighbour.type === "UNFRIENDLY" && neighbour.groupInstance?.liberties?.length === 1)
       )
 
       if(canMove){
         this.makeMove(position, neighbours)
-        this.currentColor = colors[colors.indexOf(this.currentColor) ^ 1];
         debug(this.stoneHandler)
       }
     }
-  }
-
-  subscribe(coords, tileHandler){
-    const stone = this.stoneHandler.getStone(coords)
-    stone.setShowHandler(tileHandler)
   }
 
   getPositions(){

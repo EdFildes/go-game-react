@@ -36,6 +36,7 @@ export const StoneHandler = class {
     members.forEach(position => {
       const stone = this.getStone(position)
       stone.setGroupId(this.id)
+      stone.setColor(currentColor)
     })
     return this.id++;
   }

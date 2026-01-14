@@ -33,21 +33,37 @@ export const getNeighbouringPositions = (
   return neighbouringPositions;
 };
 
+export const getNeighbouringGroups = (  
+  stoneHandler: StoneHandlerInstance,
+  positions: Position[]
+) => {
+  const neighbouringGroups = new Set()
+  for(const position of positions){
+    const stone = stoneHandler.getStone(position)
+    if(stone?.groupId){
+      const groupId = stone.groupId
+      neighbouringGroups.add(groupId)
+    }
+  }
+  return Array.from(neighbouringGroups)
+};
+
 export const checkNeighbours = (
   stoneHandler: StoneHandlerInstance,
   position: Position,
-  game: GameInstance,
+  currentColor
 ): Array<NeighbourProps> => {
-  const neighbouringPositions = getNeighbouringPositions(stoneHandler, position, game)
-  const neighbourProps = neighbouringPositions.map((adjPosition) => {
+  const neighbouringPositions = getNeighbouringPositions(stoneHandler, position)
+  const neighbourProps: Array<NeighbourProps> = neighbouringPositions.map((adjPosition) => {
     const stone = stoneHandler.getStone(adjPosition)
     const groupId = stone.groupId
-    const group = groupId ? stoneHandler.groupLookup[groupId];
+    const group = groupId ? stoneHandler.groupLookup[groupId] : null;
+    const neighbouringGroups = getNeighbouringGroups(stoneHandler, getNeighbouringPositions(stoneHandler, adjPosition))
     return {
-      type: getType(stone, game.currentColor),
+      type: getType(stone, currentColor),
       groupInstance: group,
       position: adjPosition,
-      neighbouringGroups: getNeighbouringGroups(stoneHandler, adjPosition, game).map(group => group[1]).filter(id => typeof id === "number")
+      neighbouringGroups
     };
   })
   return neighbourProps;

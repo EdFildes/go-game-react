@@ -7,6 +7,10 @@ export class Stone {
 
   }
 
+  setColor(color){
+    this.color = color
+  }
+
   setGroupId(id){
     this.groupId = id
   }
