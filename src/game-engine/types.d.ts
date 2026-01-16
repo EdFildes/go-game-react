@@ -16,7 +16,7 @@ export type PositionState = "EMPTY" | "FRIENDLY" | "UNFRIENDLY"
 
 export interface NeighbourProps {
   type: PositionState;
-  groupInstance: GroupInstance;
+  groupId: number;
   neighbouringGroups: number[];
   position: Position;
 }

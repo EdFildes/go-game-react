@@ -57,11 +57,10 @@ export const checkNeighbours = (
   const neighbourProps: Array<NeighbourProps> = neighbouringPositions.map((adjPosition) => {
     const stone = stoneHandler.getStone(adjPosition)
     const groupId = stone.groupId
-    const group = groupId ? stoneHandler.groupLookup[groupId] : null;
     const neighbouringGroups = getNeighbouringGroups(stoneHandler, getNeighbouringPositions(stoneHandler, adjPosition))
     return {
       type: getType(stone, currentColor),
-      groupInstance: group,
+      groupId: groupId,
       position: adjPosition,
       neighbouringGroups
     };

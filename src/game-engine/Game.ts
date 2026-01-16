@@ -33,46 +33,49 @@ export class Game {
   }
 
   makeMove(position: Position, neighbours: NeighbourProps[]){
-    const { liberties, occupations } = getLiberties(neighbours);
-    let groupId = this.stoneHandler.createNewGroup([position], liberties, occupations, this.currentColor);
+    // const { liberties, occupations } = getLiberties(neighbours);
+    // let groupId = this.stoneHandler.createNewGroup([position], liberties, occupations, this.currentColor);
 
-    for(let neighbour of neighbours){
-      if(neighbour.type === "FRIENDLY"){
-        neighbour.groupInstance.removeLiberties([position]);
-        this.stoneHandler.mergeGroups(groupId, neighbour.groupInstance.id);
-      }
-      if(neighbour.type === "UNFRIENDLY"){
-        neighbour.groupInstance.removeLiberties([position], groupId);
-        if (neighbour.groupInstance.liberties.length < 1) {
-          this.stoneHandler.removeGroup(neighbour.groupInstance.id);
-        }
-      }
-    }
+    // for(let neighbour of neighbours){
+    //   if(neighbour.type === "FRIENDLY"){
+    //     neighbour.groupInstance.removeLiberties([position]);
+    //     this.stoneHandler.mergeGroups(groupId, neighbour.groupInstance.id);
+    //   }
+    //   if(neighbour.type === "UNFRIENDLY"){
+    //     neighbour.groupInstance.removeLiberties([position], groupId);
+    //     if (neighbour.groupInstance.liberties.length < 1) {
+    //       this.stoneHandler.removeGroup(neighbour.groupInstance.id);
+    //     }
+    //   }
+    // }
     const newColor = colors[colors.indexOf(this.currentColor) ^ 1];
     this.currentColor = newColor
+
   }
 
   simulateClick(position: Position) {
 
     const stone = this.stoneHandler.getStone(position)
+    console.log(stone)
 
     if (!stone.color) {
       
-      console.log("\n ** new turn...\n", "Current color ", this.currentColor)
+      // console.log("\n ** new turn...\n", "Current color ", this.currentColor)
 
       let neighbours = checkNeighbours(this.stoneHandler, position, this);
 
       const canMove = neighbours.some(neighbour => 
         neighbour.type === "EMPTY" || 
-        (neighbour.type === "FRIENDLY" && neighbour.groupInstance?.liberties?.length > 1) || 
-        (neighbour.type === "UNFRIENDLY" && neighbour.groupInstance?.liberties?.length === 1)
+        (neighbour.type === "FRIENDLY" && neighbour.groupId && this.stoneHandler.getGroup(neighbour.groupId).liberties.length > 1) || 
+        (neighbour.type === "UNFRIENDLY" && neighbour.groupId && this.stoneHandler.getGroup(neighbour.groupId).liberties.length === 1)
       )
 
       if(canMove){
         this.makeMove(position, neighbours)
+        stone.setColor(this.currentColor)
         debug(this.stoneHandler)
-      }
-    }
+      } 
+    } 
   }
 
   getPositions(){

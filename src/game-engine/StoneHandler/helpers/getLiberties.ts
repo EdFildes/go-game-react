@@ -1,6 +1,7 @@
 import type { NeighbourProps, Position } from "../../types";
 
 export const getLiberties = (neighbours: NeighbourProps[], newGroupId?: number) => {
+  console.log(neighbours)
   let liberties: Position[] = [];
   const occupations: Record<number, Position[]> = {};
 
@@ -11,7 +12,7 @@ export const getLiberties = (neighbours: NeighbourProps[], newGroupId?: number) 
     } else if(neighbour.type === "EMPTY") {
       liberties = liberties.concat([neighbour.position])
     } else if(neighbour.type === "UNFRIENDLY"){
-      const groupId = neighbour.groupInstance.id;
+      const groupId = neighbour.groupId;
       occupations[groupId] = Array.isArray(occupations[groupId]) ? 
         occupations[groupId].concat(neighbour.position) : 
         [neighbour.position]

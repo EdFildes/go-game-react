@@ -1,4 +1,0 @@
-describe("Game class", () => {
-    it("")
-
-})

@@ -19,6 +19,10 @@ export const StoneHandler = class {
     this.stoneLocations = initialiseBoard(size);
   }
 
+  getGroup(id){
+    return this.groupLookup[id] || null
+  }
+
   createNewGroup(
     members: Position[],
     liberties: Position[],
@@ -98,6 +102,11 @@ export const StoneHandler = class {
       }
     });
     delete this.groupLookup[groupId];
+  }
+
+  setStone(coords, stone){
+    const [row, col] = coords
+    this.stoneLocations[row][col] = stone
   }
 
   getStone(coords){

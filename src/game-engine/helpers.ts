@@ -1,4 +1,3 @@
-import { Stone } from "./Stone.ts";
 import type {
   StoneHandlerInstance,
   NeighbourProps,
@@ -7,7 +6,7 @@ import type {
 } from "./types.d.ts";
 
 export const initialiseBoard = (size: number) =>
-  new Array(size).fill(null).map((_) => new Array(size).fill(new Stone));
+  new Array(size).fill(null).map((_) => new Array(size).fill(null));
 
 export const getUniqueGroups = (neighbours: NeighbourProps[], type: PositionState) => new Set(
   neighbours

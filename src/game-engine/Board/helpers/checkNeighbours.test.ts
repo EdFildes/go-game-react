@@ -44,6 +44,29 @@ describe("checkNeighbours", () => {
         const neighbourProps = checkNeighbours(mockStoneHandler, position, "X")
         const expectedProps = [
             {
+                groupId: 1,
+                neighbouringGroups: [1],
+                position: [0,1],
+                type: "FRIENDLY"
+            },
+            {
+                groupId: null,
+                neighbouringGroups: [1],
+                position: [1,0],
+                type: "EMPTY"
+            },
+        ]
+        expect(neighbourProps).toEqual(expectedProps)
+    })
+    it.skip("should return a list of properties relating to any neighbours", () => {
+        const position: Position = [0,0]
+        const mockStoneHandler = new StoneHandler(8)
+        const stone = mockStoneHandler.getStone([0,1])
+        stone.setColor("X")
+        stone.setGroupId(1)
+        const neighbourProps = checkNeighbours(mockStoneHandler, position, "X")
+        const expectedProps = [
+            {
                 type: "FRIENDLY",
                 groupInstance: undefined,
                 position: [0,1],
@@ -57,12 +80,6 @@ describe("checkNeighbours", () => {
             },
         ]
         expect(neighbourProps).toEqual([1])
-    })
-        it.skip("should return a list of neighbouring Groups for [5,4]", () => {
-        const origin: Position = [5,5]
-        const mockStoneHandler = new StoneHandler(8)
-        const neighbouringGroups = getNeighbouringGroups(mockStoneHandler, origin)
-        expect(neighbouringGroups).toEqual([[4,5], [5,6], [6,5], [5,4]])
     })
 
 })
