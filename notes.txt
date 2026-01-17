@@ -2,5 +2,14 @@ Go game react
 
 - decideded to go with typescript because of the object oriented nature of board games
 - decided on styled components because I felt there would be a small number of components of which there were unlikely to be multiple variations. So styled components seemed like a tidier approach
+- approached the styling of the Tiles using clip path, asked chatgpt after the fact what it approach it would have taken and it was pretty inisistent on SVG. I don't have much experience of SVG, so it would be
+cool to try that out but clip path seems to be working ok for now so I'll run with it.
 
 - the code for the  looked far worse than I remembered and a lot of it didn't work so great so I started writing some tests
+- Had been to a TDD event recently and wanted to use some of the discoveries from that
+
+- The game was sort of working in vanilla JS with the game engine in node but it meant different games weren't isolated
+- Thought react would mean things could be far more easily self contained, Plus it can be hosted on github pages
+
+- At a certain point I kept refactoring again and again because I couldn't get the class/function structure quite right so I decided to 
+go back to pen and paper and map out what everything was supposed to be doing first and then not exactly starting from scratch but going back to basics

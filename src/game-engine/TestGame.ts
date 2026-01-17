@@ -1,5 +1,5 @@
 import { checkNeighbours } from "./Board/helpers/checkNeighbours";
-import { Game, colors } from "./Game";
+import { Game, colors } from "./Game/Game_old";
 import { Color, Position, Row } from "./types.js";
 
 export class TestGame extends Game {

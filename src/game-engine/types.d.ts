@@ -3,8 +3,8 @@ import { StoneHandler } from "./StoneHandler/StoneHandler.js";
 export type Position = [number, number];
 export type Color = "O" | "X";
 export type GroupLocations = Array<Row>;
-export type Square = "-" | number;
-export type Row = Square[];
+export type Stone = "-" | number;
+export type Row = Stone[];
 export type GroupLookup = Record<number, any>; // wierd error then doing typeof Group
 export type StoneHandlerInstance = any; //typeof StoneHandler;
 export type GroupInstance = any;

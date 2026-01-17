@@ -1,25 +1,38 @@
 import { useContext, useEffect, useState } from "react"
-import {TileContainer, TileQuadrants} from "./components"
+import {Stone, TileContainer, TileQuadrants} from "./components"
 import { GameContext } from "../../App";
-import {Stone} from "src/game-engine/Stone"
 
-const Tile: React.FC<{position: string}> = ({position, coords}) => {
+const Tile: React.FC<{position: string}> = ({quadrant, position}) => {
   const game = useContext(GameContext); 
   const [stoneColor, setStoneColor] = useState(null)
 
-  useEffect(() => {
-    const stone = new Stone(coords, setStoneColor)
-    game.stoneHandler.setStone(stone)
-  }, [])
+  // const subscribeToGameState = (message: string) => {
+  //   if(message === "REMOVE_PIECE"){
+  //     setStoneColor(null)
+  //   }
+  // }
 
-  const makeMove = () => {
-    game.simulateClick(coords)
+  // useEffect(() => {
+  //   game.subscribeToUI()
+  // }, [])
+
+  const handleClick = () => {
+    const { color, canPlace } = game.requestCanPlacePiece(position)
+    if(canPlace) {
+      game.placePiece(position)
+      setStoneColor(color)
+    }
+  }
+
+  const colorMap = {
+    "W": "white",
+    "B": "black"
   }
 
   return (
-    <TileContainer onClick={makeMove}>
-      <TileQuadrants position={position}/>
-      {stoneColor && <Stone stoneColor={stoneColor === "X" ? "black" : "white"} />}
+    <TileContainer onClick={handleClick}>
+      <TileQuadrants position={quadrant}/>
+      {stoneColor && <Stone stoneColor={colorMap[stoneColor]} />}
     </TileContainer>
   )
 }

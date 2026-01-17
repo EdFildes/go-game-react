@@ -5,8 +5,11 @@ import type {
   Square
 } from "./types.d.ts";
 
-export const initialiseBoard = (size: number) =>
-  new Array(size).fill(null).map((_) => new Array(size).fill(null));
+export const initialiseBoard = (size: number) => {
+  const rows = new Array(size).fill(null).map(row => new Array(size).fill(null))
+  return rows
+}
+  .map((_) => new Array(size).fill(null));
 
 export const getUniqueGroups = (neighbours: NeighbourProps[], type: PositionState) => new Set(
   neighbours

@@ -5,8 +5,8 @@ import { getTilePosition } from "./helpers";
 const populateRow = (size: number, rowNum) => {
   const row = []
   for (let colNum = 0; colNum < size; colNum++) {
-    const position = getTilePosition(rowNum, colNum, size)
-    row.push(<Tile key={[rowNum, colNum].toString()} coords={[rowNum, colNum]} position={position} />)
+    const quadrant = getTilePosition(rowNum, colNum, size)
+    row.push(<Tile key={[rowNum, colNum].toString()} position={[rowNum, colNum]} quadrant={quadrant} />)
   }
   return row
 }

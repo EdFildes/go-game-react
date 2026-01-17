@@ -1,7 +1,7 @@
-import { checkNeighbours } from "./Board/helpers/checkNeighbours";
-import { StoneHandler } from "./StoneHandler/StoneHandler";
-import { getLiberties } from "./StoneHandler/helpers/getLiberties";
-import { getGroupColor } from "./helpers";
+import { checkNeighbours } from "../Board/helpers/checkNeighbours";
+import { StoneHandler } from "../StoneHandler/StoneHandler";
+import { getLiberties } from "../StoneHandler/helpers/getLiberties";
+import { getGroupColor, initialiseBoard } from "../helpers";
 import type {
   Color,
   GroupInstance,
@@ -9,7 +9,7 @@ import type {
   NeighbourProps,
   Position,
   Row,
-} from "./types";
+} from "../types";
 
 export const colors: Color[] = ["O", "X"];
 
@@ -53,39 +53,41 @@ export class Game {
 
   }
 
-  simulateClick(position: Position) {
+  subscribeToUI(){
+    this.stoneHandler.set
+  }
+
+  placePiece(position: Position) {
 
     const stone = this.stoneHandler.getStone(position)
-    console.log(stone)
 
-    if (!stone.color) {
-      
-      // console.log("\n ** new turn...\n", "Current color ", this.currentColor)
+    if (!stone) {
 
-      let neighbours = checkNeighbours(this.stoneHandler, position, this);
+      // let neighbours = checkNeighbours(this.stoneHandler, position, this);
 
-      const canMove = neighbours.some(neighbour => 
-        neighbour.type === "EMPTY" || 
-        (neighbour.type === "FRIENDLY" && neighbour.groupId && this.stoneHandler.getGroup(neighbour.groupId).liberties.length > 1) || 
-        (neighbour.type === "UNFRIENDLY" && neighbour.groupId && this.stoneHandler.getGroup(neighbour.groupId).liberties.length === 1)
-      )
+      // const canMove = neighbours.some(neighbour => 
+      //   neighbour.type === "EMPTY" || 
+      //   (neighbour.type === "FRIENDLY" && neighbour.groupInstance?.liberties?.length > 1) || 
+      //   (neighbour.type === "UNFRIENDLY" && neighbour.groupInstance?.liberties?.length === 1)
+      // )
 
-      if(canMove){
-        this.makeMove(position, neighbours)
-        stone.setColor(this.currentColor)
-        debug(this.stoneHandler)
-      } 
-    } 
+      // if(canMove){
+      //   this.makeMove(position, neighbours)
+      //   debug(this.stoneHandler)
+      // }
+      this.stoneHandler.setStone(position)
+    }
   }
 
   getPositions(){
-    const positions: string[][] = [];
-    this.stoneHandler.stoneLocations.forEach((row: Row) => {
-      const mappedRow: string[] = row.map((id) => getGroupColor(this.stoneHandler, id));
-      console.log(mappedRow)
-      positions.push(mappedRow);
-    });
-    this.positions = positions;
-    return positions;
+      const positions: string[][] = [];
+      this.stoneHandler.stoneLocations.forEach((row: Row) => {
+        const mappedRow: string[] = row.map((id) => getGroupColor(this.stoneHandler, id));
+        console.log(mappedRow)
+        positions.push(mappedRow);
+      });
+      this.positions = positions;
+      return positions;
+    }
   }
-}
+  

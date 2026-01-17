@@ -1,29 +1,22 @@
 import { without } from "ramda";
 import type {
   Color,
-  StoneHandlerInstance,
   Members,
   Position,
-} from "./types.d.ts";
+} from "../types.js";
 
 export const Group = class {
-  readonly color: Color;
   readonly id: number;
   liberties: Position[]
   members: Members = [];
-  stoneHandler: StoneHandlerInstance;
   occupations: Record<number, Position[]> = {};
 
   constructor(
-    stoneHandler: StoneHandlerInstance,
     members: Members, 
-    color: Color,
     id: number,
     liberties: Position[],
     occupations: Record<number, Position[]>,
   ) {
-    this.stoneHandler = stoneHandler;
-    this.color = color;
     this.id = id;
     this.liberties = liberties;
     this.members = this.members.concat(members);
