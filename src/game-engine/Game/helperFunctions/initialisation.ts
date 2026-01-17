@@ -1,3 +1,5 @@
+import { Group } from "../../../game-engine/Group/Group"
+
 export const initialiseGame = (size: number) => {
   const gameState = new Array(size).fill(null).map((row, rowNum) => 
     new Array(size).fill(null).map((item, colNum) => {
@@ -18,8 +20,22 @@ export const getGameStateItemByPosition = (gameState, position) => {
   return stateItem
 }
 
-export const updateGameStateWithPlacedStone = (gameState, newPieceLocation, color) => {
+const getNextAvailableGroupId = (gameState) => {
+  const groupIds = gameState.flat()
+    .filter(stateObject => Boolean(stateObject.groupInstance))
+    .map(stateObject => stateObject.groupInstance.id)
+  groupIds.sort()
+  return groupIds.pop() + 1
+}
+
+export const updateGameStateWithPlacedStone = (gameState, newPieceLocation, color, groupInfo) => {
   const stateItem = getGameStateItemByPosition(gameState, newPieceLocation)
   stateItem.isStonePlaced = true
   stateItem.stoneColor = color
+  stateItem.groupInstance = new Group(
+    [newPieceLocation],
+    getNextAvailableGroupId(gameState),
+    groupInfo.liberties || [],
+    groupInfo.occupationMap || {}
+  )
 }

@@ -1,6 +1,6 @@
 import { switchColor } from "./helperFunctions/colors";
 import { initialiseGame, updateGameStateWithPlacedStone } from "./helperFunctions/initialisation";
-import { checkIsPlacementCompatibleWithNeighbours } from "./helperFunctions/neighbours";
+import { checkIsPlacementCompatibleWithNeighbours, getLiberties } from "./helperFunctions/neighbours";
 import { checkIsPositionEmpty, respondToPiecePlacementImpact} from "./helperFunctions/pieces";
 
 type GameStateObject = {
@@ -32,7 +32,8 @@ export class Game {
   }
 
   placePiece(newPiecePosition){
-    updateGameStateWithPlacedStone(this.gameState, newPiecePosition, this.color)
+    const groupInfo = getLiberties(this.gameState, newPiecePosition, this.color)
+    updateGameStateWithPlacedStone(this.gameState, newPiecePosition, this.color, groupInfo)
     respondToPiecePlacementImpact()
 	  this.color = switchColor(this.color)
     this.canPlacePiece = false

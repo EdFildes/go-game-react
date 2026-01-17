@@ -5,7 +5,7 @@ import { checkIsPositionEmpty } from "./helperFunctions/pieces"
 
 describe("Game helper functions", () => {
     describe("checkIsPositionEmpty()", () => {
-        it("should return true if position is empty", () => {
+        it("should return TRUE if position is empty", () => {
             const gameInstance = new Game(3, "W")
             const gameState = gameInstance.gameState
             const isPositionEmpty = checkIsPositionEmpty(gameState, [0,0])
@@ -21,74 +21,84 @@ describe("Game helper functions", () => {
         })
     })
     describe("checkIsPlacementCompatibleWithNeighbours()", () => {
-        it("should return true if one nieghbour is empty", () => {
+        it("should return TRUE if one nieghbour is empty", () => {
             //[- B - -]
-            //[B - B -]
+            //[B(W)B -]
             //[- - - -]
             //[- - - -]
             const gameInstance = new Game(4, "W")
             const gameState = gameInstance.gameState
-            updateGameStateWithPlacedStone(gameState, [0,1], "B")
-            updateGameStateWithPlacedStone(gameState, [1,0], "B")
-            updateGameStateWithPlacedStone(gameState, [1,2], "B")
+            updateGameStateWithPlacedStone(gameState, [0,1], "B", {})
+            updateGameStateWithPlacedStone(gameState, [1,0], "B", {})
+            updateGameStateWithPlacedStone(gameState, [1,2], "B", {})
             const areNeighboursHappy = checkIsPlacementCompatibleWithNeighbours(gameState, [1,1], "W")
             expect(areNeighboursHappy).toEqual(true)
         })
         it("should return false if NO nieghbours are empty", () => {
             //[- B - -]
-            //[B - B -]
+            //[B(W)B -]
             //[- B - -]
             //[- - - -]
             const gameInstance = new Game(4, "W")
             const gameState = gameInstance.gameState
-            updateGameStateWithPlacedStone(gameState, [0,1], "B")
-            updateGameStateWithPlacedStone(gameState, [1,0], "B")
-            updateGameStateWithPlacedStone(gameState, [1,2], "B")
-            updateGameStateWithPlacedStone(gameState, [2,1], "B")
+            updateGameStateWithPlacedStone(gameState, [0,1], "B", {})
+            updateGameStateWithPlacedStone(gameState, [1,0], "B", {})
+            updateGameStateWithPlacedStone(gameState, [1,2], "B", {})
+            updateGameStateWithPlacedStone(gameState, [2,1], "B", {})
             const areNeighboursHappy = checkIsPlacementCompatibleWithNeighbours(gameState, [1,1], "W")
             expect(areNeighboursHappy).toEqual(false)
         })
-        it("should return true if at least one neighbour is friendly", () => {
-            //[- W - -]
-            //[B - B -]
-            //[- B - -]
-            //[- - - -]
-            const gameInstance = new Game(4, "W")
-            const gameState = gameInstance.gameState
-            updateGameStateWithPlacedStone(gameState, [0,1], "W")
-            updateGameStateWithPlacedStone(gameState, [1,0], "B")
-            updateGameStateWithPlacedStone(gameState, [1,2], "B")
-            updateGameStateWithPlacedStone(gameState, [2,1], "B")
-            const areNeighboursHappy = checkIsPlacementCompatibleWithNeighbours(gameState, [1,1], "W")
-            expect(areNeighboursHappy).toEqual(true)
-        })
-        it("should return true if at least one neighbour is friendly and has at least one liberty", () => {
-            //[W W B -]
-            //[B - B -]
-            //[- - - -]
-            //[- - - -]
-            const gameInstance = new Game(4, "W")
-            const gameState = gameInstance.gameState
-            updateGameStateWithPlacedStone(gameState, [0,0], "W")
-            updateGameStateWithPlacedStone(gameState, [0,1], "W")
-            updateGameStateWithPlacedStone(gameState, [0,2], "B")
-            updateGameStateWithPlacedStone(gameState, [1,0], "B")
-            updateGameStateWithPlacedStone(gameState, [1,2], "B")
-            const areNeighboursHappy = checkIsPlacementCompatibleWithNeighbours(gameState, [1,1], "W")
-            expect(areNeighboursHappy).toEqual(true)
-        })
         it("should return false if a neighbour is friendly and has only one liberty", () => {
             //[W W B -]
-            //[B - B -]
+            //[B(W)B -]
             //[- B - -]
             //[- - - -]
             const gameInstance = new Game(4, "W")
             const gameState = gameInstance.gameState
-            updateGameStateWithPlacedStone(gameState, [0,1], "W")
-            updateGameStateWithPlacedStone(gameState, [1,0], "B")
-            updateGameStateWithPlacedStone(gameState, [1,2], "B")
-            updateGameStateWithPlacedStone(gameState, [2,1], "B")
+            updateGameStateWithPlacedStone(gameState, [0,0], "W", {})
+            updateGameStateWithPlacedStone(gameState, [0,1], "W", {liberties: [[1,0]]})
+            updateGameStateWithPlacedStone(gameState, [0,2], "B", {})
+            updateGameStateWithPlacedStone(gameState, [1,0], "B", {})
+            updateGameStateWithPlacedStone(gameState, [1,2], "B", {})
+            updateGameStateWithPlacedStone(gameState, [2,1], "B", {})
             const areNeighboursHappy = checkIsPlacementCompatibleWithNeighbours(gameState, [1,1], "W")
+            expect(areNeighboursHappy).toEqual(false)
+        })
+        it("should return TRUE if at least one neighbour is friendly and has more than one liberty", () => {
+            //[- W B -]
+            //[B(W)B -]
+            //[- B - -]
+            //[- - - -]
+            const gameInstance = new Game(4, "W")
+            const gameState = gameInstance.gameState
+            updateGameStateWithPlacedStone(gameState, [0,1], "W", {liberties: [[2,0]]})
+            updateGameStateWithPlacedStone(gameState, [0,2], "B", {})
+            updateGameStateWithPlacedStone(gameState, [1,0], "B", {})
+            updateGameStateWithPlacedStone(gameState, [1,2], "B", {})
+            const areNeighboursHappy = checkIsPlacementCompatibleWithNeighbours(gameState, [1,1], "W")
+            expect(areNeighboursHappy).toEqual(true)
+        })
+        it("should return TRUE if surrounded by a group of foes with only ONE liberty", () => {
+            //[(W) B ]
+            //[ B  B ]
+            const gameInstance = new Game(2, "W")
+            const gameState = gameInstance.gameState
+            updateGameStateWithPlacedStone(gameState, [0,1], "B", {})
+            updateGameStateWithPlacedStone(gameState, [1,0], "B", {liberties: [[1,1]]})
+            updateGameStateWithPlacedStone(gameState, [1,2], "B", {})
+            const areNeighboursHappy = checkIsPlacementCompatibleWithNeighbours(gameState, [0,0], "W")
+            expect(areNeighboursHappy).toEqual(true)
+        })
+        it("should return FALSE if surrounded by a group of foes with MORE THAN ONE liberty", () => {
+            //[(W)B -]
+            //[ B B -]
+            //[ - - -]
+            const gameInstance = new Game(3, "W")
+            const gameState = gameInstance.gameState
+            updateGameStateWithPlacedStone(gameState, [0,1], "B", {})
+            updateGameStateWithPlacedStone(gameState, [1,0], "B", {liberties: [[1,1], ]})
+            updateGameStateWithPlacedStone(gameState, [1,2], "B", {})
+            const areNeighboursHappy = checkIsPlacementCompatibleWithNeighbours(gameState, [0,0], "W")
             expect(areNeighboursHappy).toEqual(false)
         })
     })

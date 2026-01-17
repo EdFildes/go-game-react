@@ -11,7 +11,7 @@ export const directionOffsets: Array<[number, number]> = [
 const getFriendStatus = (currentColor, neighbourColor: string) => {
   if(!neighbourColor) return "EMPTY"
   if(neighbourColor === currentColor) return "FRIEND"
-  if(neighbourColor === currentColor) return "FOE"
+  if(neighbourColor !== currentColor) return "FOE"
 }
 
 export const getNeighbourProps = (  
@@ -26,10 +26,8 @@ export const getNeighbourProps = (
 
     const gameStateItem = getGameStateItemByPosition(gameState, [row + rowOffset, col + columnOffset])
     if(gameStateItem){
-      const group = gameStateItem.isStonePlaced ? gameState.groupInstance : null
       const neighbourPropItem = {
         ...gameStateItem,
-        liberties: group ? group.liberties : null,
         friendStatus: getFriendStatus(currentColor, gameStateItem.stoneColor)
       }
       neighbourProps.push(neighbourPropItem)
@@ -43,7 +41,23 @@ export const checkIsPlacementCompatibleWithNeighbours = (gameState, position, cu
   const neighbourProps = getNeighbourProps(gameState, position, currentColor)
   const neighboursAreHappy = neighbourProps.some(neighbour => 
     neighbour.friendStatus === "EMPTY" ||
-    neighbour.friendStatus === "FRIEND" && neighbour.liberties > 1
+    neighbour.friendStatus === "FRIEND" && neighbour.groupInstance.liberties.length > 1 || 
+    neighbour.friendStatus === "FOE" && neighbour.groupInstance.liberties.length === 1
   )
+  console.log(neighbourProps, currentColor)
   return neighboursAreHappy
+}
+
+export const getLiberties = (gameState,position,currentColor) => {
+  const neighbourProps = getNeighbourProps(gameState,position,currentColor)
+  const liberties = neighbourProps
+    .filter(neighbour => neighbour.friendStatus === "EMPTY")
+    .map(neighbour => neighbour.position)
+  const occupationMap = neighbourProps
+    .filter(neighbour => neighbour.friendStatus === "FOE")
+    .map(neighbour => {
+      const groupId = neighbour.groupInstance.id
+      return {[groupId]: neighbour.position}
+    })
+  return {liberties, occupationMap}
 }

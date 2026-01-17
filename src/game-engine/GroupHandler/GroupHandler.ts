@@ -1,6 +1,5 @@
 import { Stone } from "../Stone/Stone";
 import { Group } from "../Group/Group.js";
-import { initialiseBoard } from "../helpers.ts";
 import type {
   GameInstance,
   GroupLocations,
@@ -13,11 +12,6 @@ export const GroupHandler = class {
   groupLookup: GroupLookup = {};
   id: number = 0;
 
-  constructor(size) {
-    this.size = size
-    this.board = initialiseBoard(size);
-  }
-
   getGroup(id){
     return this.groupLookup[id] || null
   }
@@ -29,9 +23,7 @@ export const GroupHandler = class {
     currentColor: string
   ) {
     this.groupLookup[this.id] = new Group(
-      this,
       members,
-      currentColor,
       this.id,
       liberties,
       occupations,

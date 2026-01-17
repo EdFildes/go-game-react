@@ -13,3 +13,5 @@ cool to try that out but clip path seems to be working ok for now so I'll run wi
 
 - At a certain point I kept refactoring again and again because I couldn't get the class/function structure quite right so I decided to 
 go back to pen and paper and map out what everything was supposed to be doing first and then not exactly starting from scratch but going back to basics
+
+- I opted for looping through neighbouring stones a several times each turn instead of just once just to separate stages a bit more
