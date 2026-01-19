@@ -19,14 +19,14 @@ export const GroupHandler = class {
   createNewGroup(
     members: Position[],
     liberties: Position[],
-    occupations: Record<number, Position[]>,
+    adjacentFoes: Record<number, Position[]>,
     currentColor: string
   ) {
     this.groupLookup[this.id] = new Group(
       members,
       this.id,
       liberties,
-      occupations,
+      adjacentFoes,
     );
     members.forEach(position => {
       const stone = this.getStone(position)
@@ -40,27 +40,27 @@ export const GroupHandler = class {
     idToJoin: number, 
     members: Position[], 
     liberties: Position[], 
-    occupations: Record<number, Position[]>
+    adjacentFoes: Record<number, Position[]>
   ) {
     const group = this.groupLookup[idToJoin];
     group.members = members;
     group.liberties = liberties;
-    group.occupations = occupations;
+    group.adjacentFoes = adjacentFoes;
   }
 
   mergeGroups(newId: number, oldId: number) {
     let members: Position[] = [];
     let liberties: Position[] = [];
-    let occupations = {};
+    let adjacentFoes = {};
     
     [newId, oldId].forEach((id) => {
       const group = this.groupLookup[id];
 
       members = members.concat(group.members);
       liberties = uniq(liberties.concat(group.liberties))
-      occupations = mergeWith(concat,
-        occupations,
-        group.occupations
+      adjacentFoes = mergeWith(concat,
+        adjacentFoes,
+        group.adjacentFoes
       )
     });
 
@@ -69,13 +69,13 @@ export const GroupHandler = class {
       stone.setGroupId(newId)
     })
 
-    this.joinExistingGroup(newId, members, liberties, occupations)
+    this.joinExistingGroup(newId, members, liberties, adjacentFoes)
 
     // cleanup
     Object.values(this.groupLookup).forEach(group => {
-      if(group.occupations[oldId]){
-        group.occupations[newId] = group.occupations[oldId]
-        delete group.occupations[oldId]
+      if(group.adjacentFoes[oldId]){
+        group.adjacentFoes[newId] = group.adjacentFoes[oldId]
+        delete group.adjacentFoes[oldId]
       }
     });
 
@@ -88,7 +88,7 @@ export const GroupHandler = class {
       ([row, col]: Position) => (this.board[row][col] = "-"),
     );
     Object.values(this.groupLookup).forEach((group) => {
-      if (group.occupations[groupId]) {
+      if (group.adjacentFoes[groupId]) {
         group.refundLiberties(groupId);
       }
     });

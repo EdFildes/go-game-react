@@ -25,7 +25,8 @@ const getNextAvailableGroupId = (gameState) => {
     .filter(stateObject => Boolean(stateObject.groupInstance))
     .map(stateObject => stateObject.groupInstance.id)
   groupIds.sort()
-  return groupIds.pop() + 1
+  const maxId = groupIds.pop() || 0
+  return maxId + 1
 }
 
 export const updateGameStateWithPlacedStone = (gameState, newPieceLocation, color, groupInfo) => {
@@ -33,9 +34,9 @@ export const updateGameStateWithPlacedStone = (gameState, newPieceLocation, colo
   stateItem.isStonePlaced = true
   stateItem.stoneColor = color
   stateItem.groupInstance = new Group(
-    [newPieceLocation],
+    newPieceLocation,
     getNextAvailableGroupId(gameState),
     groupInfo.liberties || [],
-    groupInfo.occupationMap || {}
+    groupInfo.adjacentFoes || []
   )
 }

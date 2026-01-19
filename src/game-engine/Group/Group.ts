@@ -1,4 +1,3 @@
-import { without } from "ramda";
 import type {
   Color,
   Members,
@@ -7,41 +6,38 @@ import type {
 
 export const Group = class {
   readonly id: number;
-  liberties: Position[]
-  members: Members = [];
-  occupations: Record<number, Position[]> = {};
+  liberties: Position[];
+  members: Position[];
+  adjacentFoes: Position[];
 
   constructor(
-    members: Members, 
+    initialMember: Position, 
     id: number,
     liberties: Position[],
-    occupations: Record<number, Position[]>,
+    adjacentFoes: Position[],
   ) {
     this.id = id;
     this.liberties = liberties;
-    this.members = this.members.concat(members);
-    this.occupations = occupations;
+    this.members = [initialMember];
+    this.adjacentFoes = adjacentFoes;
   }
 
   addLiberties(liberties: Position[]) {
-    this.liberties = this.liberties.concat(liberties);
+    this.liberties = Array.from(new Set([...this.liberties, ...liberties]));
   }
 
-  refundLiberties(groupId: number) {
-    this.liberties = this.liberties.concat(this.occupations[groupId]);
-    delete this.occupations[groupId];
-  }
-
-  removeLiberties = (liberties: Position[], unfriendlyGroupId: number) => {
-    this.liberties = without(liberties, this.liberties);
-    if(typeof unfriendlyGroupId === "number"){
-      this.occupations[unfriendlyGroupId] = Array.isArray(this.occupations[unfriendlyGroupId]) ? 
-      this.occupations[unfriendlyGroupId].concat(liberties) : 
-      liberties
-    }
+  addMembers = (newMembers: Set<Position>) => {
+    this.members = Array.from(new Set([...this.members, ...newMembers]));
   };
 
-  addMember = (position: Position) => {
-    this.members.push(position);
+  addAdjacentFoes = (newAdjacentFoes: Set<Position>) => {
+    this.adjacentFoes = Array.from(new Set([...this.adjacentFoes, ...newAdjacentFoes]));
+  };
+
+  removeLiberties = (liberties: Position[], friendStatus) => {
+    console.log(this.id)
+    const stringifiedLiberties = liberties.map(lib => lib.toString())
+    this.liberties = this.liberties.filter(liberty => !stringifiedLiberties.includes(liberty.toString()))
+    if(friendStatus === "FOE") this.adjacentFoes = Array.from(new Set(this.adjacentFoes.concat(liberties)))
   };
 };

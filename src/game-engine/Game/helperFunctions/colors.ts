@@ -7,7 +7,7 @@ export const switchColor = (currentColor) => {
     switch(currentColor){
         case Colors.WHITE:
             return Colors.BLACK
-        case Colors.WHITE:
+        case Colors.BLACK:
             return Colors.WHITE
         default:
             return Colors.WHITE

@@ -6,15 +6,15 @@ const Tile: React.FC<{position: string}> = ({quadrant, position}) => {
   const game = useContext(GameContext); 
   const [stoneColor, setStoneColor] = useState(null)
 
-  // const subscribeToGameState = (message: string) => {
-  //   if(message === "REMOVE_PIECE"){
-  //     setStoneColor(null)
-  //   }
-  // }
+  const subscribeToGameState = (message: string) => {
+    if(message === "REMOVE_STONE"){
+      setStoneColor(null)
+    }
+  }
 
-  // useEffect(() => {
-  //   game.subscribeToUI()
-  // }, [])
+  useEffect(() => {
+    game.addUISubscriber(position, subscribeToGameState)
+  }, [])
 
   const handleClick = () => {
     const { color, canPlace } = game.requestCanPlacePiece(position)

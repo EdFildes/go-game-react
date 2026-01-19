@@ -37,15 +37,14 @@ export const getNeighbourProps = (
   return neighbourProps;
 };
 
-export const checkIsPlacementCompatibleWithNeighbours = (gameState, position, currentColor) => {
+export const checkMoveIsValid = (gameState, position, currentColor) => {
   const neighbourProps = getNeighbourProps(gameState, position, currentColor)
-  const neighboursAreHappy = neighbourProps.some(neighbour => 
+  const moveIsValid = neighbourProps.some(neighbour => 
     neighbour.friendStatus === "EMPTY" ||
     neighbour.friendStatus === "FRIEND" && neighbour.groupInstance.liberties.length > 1 || 
     neighbour.friendStatus === "FOE" && neighbour.groupInstance.liberties.length === 1
   )
-  console.log(neighbourProps, currentColor)
-  return neighboursAreHappy
+  return moveIsValid
 }
 
 export const getLiberties = (gameState,position,currentColor) => {
@@ -53,11 +52,8 @@ export const getLiberties = (gameState,position,currentColor) => {
   const liberties = neighbourProps
     .filter(neighbour => neighbour.friendStatus === "EMPTY")
     .map(neighbour => neighbour.position)
-  const occupationMap = neighbourProps
+  const adjacentFoes = neighbourProps
     .filter(neighbour => neighbour.friendStatus === "FOE")
-    .map(neighbour => {
-      const groupId = neighbour.groupInstance.id
-      return {[groupId]: neighbour.position}
-    })
-  return {liberties, occupationMap}
+    .map(neighbour => neighbour.position)
+  return {liberties, adjacentFoes}
 }

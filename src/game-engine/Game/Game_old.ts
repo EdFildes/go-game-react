@@ -16,7 +16,7 @@ export const colors: Color[] = ["O", "X"];
 const debug = (stoneHandler: StoneHandlerInstance) => {
   // debug info
   Object.values(stoneHandler.groupLookup).forEach((group: GroupInstance) => {
-    console.log("group: ", group.id, " liberties: ", group.liberties, " occupations: ", group.occupations)
+    console.log("group: ", group.id, " liberties: ", group.liberties, " adjacentFoes: ", group.adjacentFoes)
   })
   stoneHandler.stoneLocations.forEach((row: Row) => console.log(row.map(stone => stone.color).join(" ")));
 }
@@ -33,8 +33,8 @@ export class Game {
   }
 
   makeMove(position: Position, neighbours: NeighbourProps[]){
-    // const { liberties, occupations } = getLiberties(neighbours);
-    // let groupId = this.stoneHandler.createNewGroup([position], liberties, occupations, this.currentColor);
+    // const { liberties, adjacentFoes } = getLiberties(neighbours);
+    // let groupId = this.stoneHandler.createNewGroup([position], liberties, adjacentFoes, this.currentColor);
 
     // for(let neighbour of neighbours){
     //   if(neighbour.type === "FRIENDLY"){
