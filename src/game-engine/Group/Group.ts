@@ -4,6 +4,8 @@ import type {
   Position,
 } from "../types.js";
 
+import {uniq, without} from "ramda"
+
 export const Group = class {
   readonly id: number;
   liberties: Position[];
@@ -23,21 +25,19 @@ export const Group = class {
   }
 
   addLiberties(liberties: Position[]) {
-    this.liberties = Array.from(new Set([...this.liberties, ...liberties]));
+    this.liberties = uniq([...this.liberties, ...liberties]);
   }
 
   addMembers = (newMembers: Set<Position>) => {
-    this.members = Array.from(new Set([...this.members, ...newMembers]));
+    this.members = uniq([...this.members, ...newMembers]);
   };
 
   addAdjacentFoes = (newAdjacentFoes: Set<Position>) => {
-    this.adjacentFoes = Array.from(new Set([...this.adjacentFoes, ...newAdjacentFoes]));
+    this.adjacentFoes = uniq([...this.adjacentFoes, ...newAdjacentFoes]);
   };
 
   removeLiberties = (liberties: Position[], friendStatus) => {
-    console.log(this.id)
-    const stringifiedLiberties = liberties.map(lib => lib.toString())
-    this.liberties = this.liberties.filter(liberty => !stringifiedLiberties.includes(liberty.toString()))
-    if(friendStatus === "FOE") this.adjacentFoes = Array.from(new Set(this.adjacentFoes.concat(liberties)))
+    this.liberties = without(liberties, this.liberties)
+    if(friendStatus === "FOE") this.adjacentFoes = uniq(this.adjacentFoes.concat(liberties))
   };
 };

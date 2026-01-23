@@ -28,7 +28,7 @@ export const removeGroup = (gameState, groupForRemoval) => {
     groupForRemoval.adjacentFoes.forEach(position => {
       const stateItem = getGameStateItemByPosition(gameState, position)
       const libertiesToRefund = stateItem.groupInstance.members
-      stateItem.groupInstance.addLiberties()
+      stateItem.groupInstance.addLiberties(libertiesToRefund)
     })
     // const group = this.groupLookup[groupId];
     // group.members.forEach(

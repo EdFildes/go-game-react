@@ -8,6 +8,7 @@ const Tile: React.FC<{position: string}> = ({quadrant, position}) => {
 
   const subscribeToGameState = (message: string) => {
     if(message === "REMOVE_STONE"){
+      console.log("stone removed", position)
       setStoneColor(null)
     }
   }
@@ -18,6 +19,7 @@ const Tile: React.FC<{position: string}> = ({quadrant, position}) => {
 
   const handleClick = () => {
     const { color, canPlace } = game.requestCanPlacePiece(position)
+    console.log(stoneColor)
     if(canPlace) {
       game.placePiece(position)
       setStoneColor(color)

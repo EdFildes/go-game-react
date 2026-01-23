@@ -4,7 +4,7 @@ import { checkMoveIsValid } from "./helperFunctions/neighbours"
 import { checkIsPositionEmpty } from "./helperFunctions/pieces"
 
 describe("Game helper functions", () => {
-    describe.skip("checkIsPositionEmpty()", () => {
+    describe("checkIsPositionEmpty()", () => {
         it("should return TRUE if position is empty", () => {
             const gameInstance = new Game(3, "W")
             const gameState = gameInstance.gameState
@@ -20,7 +20,7 @@ describe("Game helper functions", () => {
             expect(isPositionEmpty).toEqual(false)
         })
     })
-    describe.skip("checkMoveIsValid()", () => {
+    describe("checkMoveIsValid()", () => {
         it("should return TRUE if one nieghbour is empty", () => {
             //[- B - -]
             //[B(W)B -]
@@ -190,6 +190,26 @@ describe("Game helper functions", () => {
             gameInstance.placePiece([2,1]) // B4 placed
             gameStateItem01 = getGameStateItemByPosition(gameState, [1,0])
             expect(gameStateItem01.groupInstance.liberties).toHaveLength(3)
+        })
+        it("should remove foe from adjacent foes group if piece is taken", () => {
+            //[W1 B1 -- --]
+            //[B2 -- -- --]
+            //[-- -- -- --]
+            //[-- -- -- --]
+            const gameInstance = new Game(4, "W")
+            const gameState = gameInstance.gameState
+            gameInstance.requestCanPlacePiece([0,0])
+            gameInstance.placePiece([0,0]) // W1 placed
+            gameInstance.requestCanPlacePiece([0,1])
+            gameInstance.placePiece([0,1]) // B1 placed
+            gameInstance.requestCanPlacePiece([2,2])
+            gameInstance.placePiece([2,2]) // B2 placed
+            gameInstance.requestCanPlacePiece([1,0])
+            gameInstance.placePiece([1,0]) // B2 placed
+            // W1 should now be taken
+            const gameStateItem01 = getGameStateItemByPosition(gameState, [1,0])
+            console.log(gameStateItem01)
+            expect(gameStateItem01.groupInstance.adjacentFoes).toHaveLength(0)
         })
     })
 })
