@@ -1,4 +1,4 @@
-import {mergeWith, concat} from "ramda"
+import {mergeWith, concat, intersection} from "ramda"
 import { getGameStateItemByPosition } from "./initialisation"
 
 export const mergeGroups = (gameState, groupInstanceA, groupInstanceB) => {
@@ -11,33 +11,28 @@ export const mergeGroups = (gameState, groupInstanceA, groupInstanceB) => {
   groupInstanceB.addMembers(groupInstanceA.members);
   // copy liberty positions from group A to group B
   groupInstanceB.addLiberties(groupInstanceA.liberties);
+  groupInstanceB.removeLiberties(groupInstanceB.members)
   // copy adjacent foes from group A to group B
   groupInstanceB.addAdjacentFoes(groupInstanceA.adjacentFoes);
 }
 
 export const removeGroup = (gameState, groupForRemoval) => {
-    gameState.flat().forEach(gameStateItem => {
-      if(gameStateItem.groupInstance === groupForRemoval){
-        gameStateItem.isStonePlaced = false
-        gameStateItem.stoneColor = null
-        gameStateItem.groupInstance = null
-        gameStateItem.subscriber("REMOVE_STONE")
-      }
-    })
-    // refund liberties to any adjacent foes
-    groupForRemoval.adjacentFoes.forEach(position => {
-      const stateItem = getGameStateItemByPosition(gameState, position)
-      const libertiesToRefund = stateItem.groupInstance.members
-      stateItem.groupInstance.addLiberties(libertiesToRefund)
-    })
-    // const group = this.groupLookup[groupId];
-    // group.members.forEach(
-    //   ([row, col]: Position) => (this.board[row][col] = "-"),
-    // );
-    // Object.values(this.groupLookup).forEach((group) => {
-    //   if (group.adjacentFoes[groupId]) {
-    //     group.refundLiberties(groupId);
-    //   }
-    // });
-    // delete this.groupLookup[groupId];
-  }
+  const stonesToBeRemoved = groupForRemoval.members
+  gameState.flat().forEach(gameStateItem => {
+    if(gameStateItem.groupInstance === groupForRemoval){
+      gameStateItem.isStonePlaced = false
+      gameStateItem.stoneColor = null
+      gameStateItem.groupInstance = null
+      gameStateItem.subscriber("REMOVE_STONE")
+    }
+  })
+  
+  // refund liberties to any adjacent foes
+  // remove any members of this group from their adjacent foes list
+  groupForRemoval.adjacentFoes.forEach(foePosition => {
+    const foeStateItem = getGameStateItemByPosition(gameState, foePosition)
+    const libertiesToRefund = intersection(foeStateItem.groupInstance.adjacentFoes, stonesToBeRemoved)
+    foeStateItem.groupInstance.addLiberties(libertiesToRefund)
+    foeStateItem.groupInstance.removeAdjacentFoes(libertiesToRefund)
+  })
+}

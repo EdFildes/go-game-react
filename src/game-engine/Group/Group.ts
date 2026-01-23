@@ -28,6 +28,11 @@ export const Group = class {
     this.liberties = uniq([...this.liberties, ...liberties]);
   }
 
+  removeLiberties = (liberties: Position[], friendStatus) => {
+    this.liberties = without(liberties, this.liberties)
+    if(friendStatus === "FOE") this.adjacentFoes = uniq(this.adjacentFoes.concat(liberties))
+  };
+
   addMembers = (newMembers: Set<Position>) => {
     this.members = uniq([...this.members, ...newMembers]);
   };
@@ -35,9 +40,7 @@ export const Group = class {
   addAdjacentFoes = (newAdjacentFoes: Set<Position>) => {
     this.adjacentFoes = uniq([...this.adjacentFoes, ...newAdjacentFoes]);
   };
-
-  removeLiberties = (liberties: Position[], friendStatus) => {
-    this.liberties = without(liberties, this.liberties)
-    if(friendStatus === "FOE") this.adjacentFoes = uniq(this.adjacentFoes.concat(liberties))
+  removeAdjacentFoes = (liberatedPositions: Position[]) => {
+    this.adjacentFoes = without(liberatedPositions, this.adjacentFoes);
   };
 };
