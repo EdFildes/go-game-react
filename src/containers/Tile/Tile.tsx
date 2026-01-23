@@ -19,7 +19,6 @@ const Tile: React.FC<{position: string}> = ({quadrant, position}) => {
 
   const handleClick = () => {
     const { color, canPlace } = game.requestCanPlacePiece(position)
-    console.log(stoneColor)
     if(canPlace) {
       game.placePiece(position)
       setStoneColor(color)

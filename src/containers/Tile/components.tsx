@@ -79,10 +79,11 @@ export const TileQuadrants = styled.div<{position: string}>`
 export const Stone = styled.div`
     position: absolute;
     background: ${({stoneColor}) => stoneColor};
-    height: 1rem;
-    width: 1rem;
-    left: 1rem;
-    top: 1rem;
+    height: 2rem;
+    width: 2rem;
+    left: 0.5rem;
+    top: 0.5rem;
     border-radius: 50%;
     z-index: 1000;
+    border: 1px solid grey;
 `

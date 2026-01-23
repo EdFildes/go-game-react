@@ -11,7 +11,7 @@ const populateRow = (size: number, rowNum) => {
   return row
 }
 
-const Board: React.FC<{ size: number }> = ({ size = 8 }) => {
+const Board: React.FC<{ size: number }> = ({ size }) => {
   const rows = []
 
   for (let rowNum = 0; rowNum < size; rowNum++) {
@@ -20,7 +20,7 @@ const Board: React.FC<{ size: number }> = ({ size = 8 }) => {
   }
 
   return (
-    <BoardContainer>
+    <BoardContainer size={size}>
       {rows}
     </BoardContainer>
   )

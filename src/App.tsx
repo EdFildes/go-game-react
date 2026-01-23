@@ -6,17 +6,17 @@ import { createContext } from 'react';
 export const GameContext = createContext(null);
 
 function App() {
-  const size = 8
+  const size = 19
   const initialColor = "W"
 
   const game = new Game(size, initialColor)
 
   return (
-    <>
+    <div style={{display: "flex",justifyContent: "center" }}>
       <GameContext value={game}>
         <Board size={size}/>
       </GameContext>
-    </>
+    </div>
   )
 }
 
