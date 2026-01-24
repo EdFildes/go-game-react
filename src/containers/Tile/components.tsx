@@ -2,7 +2,7 @@ import {styled, css} from "styled-components"
 
 export const TileContainer = styled.div`
     position: relative;
-    background: yellow;
+    background: rgb(227, 153, 64);
     height: 3rem;
     width: 3rem;
 `
